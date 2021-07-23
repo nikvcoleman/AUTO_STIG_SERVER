@@ -19,7 +19,7 @@ GPUPDATE /FORCE
 ECHO IMPORTING SECURITY CONFIGURATIONS!
 secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb /verbose
 ECHO IMPORTING AUDIT POLICY!
-auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
+auditpol /restore /file:C:\Users\ESSAdmin\Desktop\Audit.inf
 ECHO CONFIGURING DEP
 BCDEDIT /set {current} nx OptOut
 ECHO DISABLING SECONDARY LOGON SERVICE
