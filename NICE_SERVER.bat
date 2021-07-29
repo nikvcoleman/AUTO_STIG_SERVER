@@ -8,7 +8,7 @@ TIMEOUT /T 5
 SET /P DRIVELETTER="PLEASE ENTER THE CURRENT USB DRIVE LETTER: "
 CLS
 ECHO COPYING FILES FROM USB TO DESKTOP!
-COPY "%DRIVELETTER%:\NICE_SERVER\GPSV\AuditPolicy\Audit.inf" "C:\Users\ESSAdmin\Desktop"
+COPY "%DRIVELETTER%:\NICE_SERVER\GPSV\AuditPolicy\audit.inf" "C:\Users\ESSAdmin\Desktop"
 ECHO COPIED AUDIT POLICY TO DESKTOP
 COPY "%DRIVELETTER%:\NICE_SERVER\GPSV\SecurityConfigurations\security.inf" "C:\Users\ESSAdmin\Desktop"
 ECHO COPIED SECURITY CONFIGURATIONS TO DESKTOP
@@ -19,7 +19,7 @@ GPUPDATE /FORCE
 ECHO IMPORTING SECURITY CONFIGURATIONS!
 secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb /verbose
 ECHO IMPORTING AUDIT POLICY!
-auditpol /restore /file:C:\Users\ESSAdmin\Desktop\Audit.inf
+auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
 ECHO CONFIGURING DEP
 BCDEDIT /set {current} nx OptOut
 ECHO DISABLING SECONDARY LOGON SERVICE
