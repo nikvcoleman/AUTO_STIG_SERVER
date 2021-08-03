@@ -8,9 +8,6 @@ TIMEOUT /T 5
 SET /P DRIVELETTER="PLEASE ENTER THE CURRENT USB DRIVE LETTER: "
 CLS
 GOTO IMPORTER
-SET /P CONTINUE ="Would you like to continue the script or EXIT? [C/E]  :"
-IF /I %CONTINUE%==C (GOTO RESUME)
-IF /I %CONTUNUE%==E (GOTO CODE_EXIT)
 REM ECHO COPYING FILES FROM USB TO DESKTOP!
 REM COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\GPSV\AuditPolicy\audit.inf" "C:\Users\ESSAdmin\Desktop"
 REM ECHO COPIED AUDIT POLICY TO DESKTOP
@@ -42,7 +39,7 @@ TIMEOUT /T 3
 ECHO CLEANING UP FILES FROM DESKTOP!
 DEL C:\Users\ESSAdmin\Desktop\audit.inf /f /q 
 DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
-
+GOTO CODE_EXIT
 
 :IMPORTER
 CLS
@@ -100,6 +97,7 @@ secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb
 DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
 XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_ACS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
 GPUPDATE /FORCE
+GOTO RESUME
 
 :VMS_BOSCH
 COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\BOSCH_VMS\audit.inf" "C:\Users\ESSAdmin\Desktop"
@@ -110,6 +108,7 @@ secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb
 DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
 XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\BOSCH_VMS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
 GPUPDATE /FORCE
+GOTO RESUME
 
 :VMS_GENETEC
 COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_VMS\audit.inf" "C:\Users\ESSAdmin\Desktop"
@@ -120,6 +119,7 @@ secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb
 DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
 XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_VMS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
 GPUPDATE /FORCE
+GOTO RESUME
 
 :VMS_MILESTONE
 COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\MILESTONE_VMS\audit.inf" "C:\Users\ESSAdmin\Desktop"
@@ -130,6 +130,7 @@ secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb
 DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
 XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\MILESTONE_VMS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
 GPUPDATE /FORCE
+GOTO RESUME
 
 :CODE_EXIT
 SET /P EXIT_PROMPT="WOULD YOU LIKE TO RESTART THE COMPUTER NOW? [Y/N]:  
