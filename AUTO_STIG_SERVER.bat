@@ -7,6 +7,10 @@ ECHO Thank me later...preferably with more money
 TIMEOUT /T 5
 SET /P DRIVELETTER="PLEASE ENTER THE CURRENT USB DRIVE LETTER: "
 CLS
+GOTO IMPORTER
+SET /P CONTINUE ="Would you like to continue the script or EXIT? [C/E]  :"
+IF /I %CONTINUE%==C (GOTO RESUME)
+IF /I %CONTUNUE%==E (GOTO CODE_EXIT)
 ECHO COPYING FILES FROM USB TO DESKTOP!
 COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\GPSV\AuditPolicy\audit.inf" "C:\Users\ESSAdmin\Desktop"
 ECHO COPIED AUDIT POLICY TO DESKTOP
@@ -20,6 +24,8 @@ ECHO IMPORTING SECURITY CONFIGURATIONS!
 secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb /verbose
 ECHO IMPORTING AUDIT POLICY!
 auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
+REM RESUME ABOVE HERE IS PRETTY MUCH USELESS TO RESUME AFTER THIS LAST ADDITION. 
+:RESUME
 ECHO CONFIGURING DEP
 BCDEDIT /set {current} nx OptOut
 ECHO DISABLING SECONDARY LOGON SERVICE
@@ -36,23 +42,23 @@ TIMEOUT /T 3
 ECHO CLEANING UP FILES FROM DESKTOP!
 DEL C:\Users\ESSAdmin\Desktop\audit.inf /f /q 
 DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
-GOTO  FIREWALL
 
-:FIREWALL
+
+:IMPORTER
 CLS
 ECHO **************************************************************************************************************
 ECHO **************************************************************************************************************
 ECHO *                                                                                                                                                                                                                                  
-ECHO *              THIS PART OF THE SCRIPT IMPORTS FIREWALL RULES BASED ON USER  INPUT 
+ECHO *              THIS PART OF THE SCRIPT IMPORTS PRIOR CONFIGURATION RULES BASED ON USER  INPUT 
 ECHO *
 ECHO **************************************************************************************************************
 ECHO **************************************************************************************************************
 ECHO *
-ECHO *				PLEASE SELECT THE SYSTEM YOU ARE CURRENTLY WORKING ON :
+ECHO *				PLEASE SELECT THE SYSTEM YOU WOULD LIKE TO IMPORT:
 ECHO *
 ECHO *
 ECHO *					(1)   ACS GALAXY   
-ECHO *					(2)   ACS GALLAGHER
+ECHO *			 		(2)   ACS GALLAGHER
 ECHO *					(3)   ACS GENETEC
 ECHO *					(4)   VMS BOSCH
 ECHO *					(5)   VMS GENETEC
@@ -61,14 +67,68 @@ ECHO *					(7)   NONE OF THE ABOVE
 ECHO *
 ECHO *
 SET /P USER_INPUT=" 				WHAT SYSTEM ARE YOU IMPORTING FIREWALL RULES FOR? [1-7]: "
-IF /I %USER_INPUT%==1 (NETSH ADVFIREWALL IMPORT %DRIVELETTER%:\AUTO_STIG_SERVER\FIREWALL\ACS_Galaxy\Galaxy_ACS_SVR_Firewall_Rules_Final.wfw)
-IF /I %USER_INPUT%==2 (NETSH ADVFIREWALL IMPORT %DRIVELETTER%:\AUTO_STIG_SERVER\FIREWALL\ACS_Gallagher\Gallagher_ACS_SVR_Firewall_Rules_Final.wfw)
-IF /I %USER_INPUT%==3 (NETSH ADVFIREWALL IMPORT %DRIVELETTER%:\AUTO_STIG_SERVER\FIREWALL\ACS_Genetec\Genetec_ACS_SVR_Firewall_Rules_Final.wfw)
-IF /I %USER_INPUT%==4 (NETSH ADVFIREWALL IMPORT %DRIVELETTER%:\AUTO_STIG_SERVER\FIREWALL\VMS_Bosch\Bosch_VMS_SVR_Firewall_Rules_Final.wfw)
-IF /I %USER_INPUT%==5 (NETSH ADVFIREWALL IMPORT %DRIVELETTER%:\AUTO_STIG_SERVER\FIREWALL\VMS_Genetec\Galaxy_VMS_SVR_Firewall_Rules_Final.wfw)
-IF /I %USER_INPUT%==6 (NETSH ADVFIREWALL IMPORT %DRIVELETTER%:\AUTO_STIG_SERVER\FIREWALL\VMS_Milestone\Milestone_VMS_SVR_Firewall_Rules_Final.wfw)
+IF /I %USER_INPUT%==1 (GOTO ACS_GALAXY)
+IF /I %USER_INPUT%==2 (GOTO ACS_GALLAGHER)
+IF /I %USER_INPUT%==3 (GOTO ACS_GENETEC)
+IF /I %USER_INPUT%==4 (GOTO VMS_BOSCH)
+IF /I %USER_INPUT%==5 (GOTO VMS_GENETEC)
+IF /I %USER_INPUT%==6 (GOTO VMS_MILESTONE)
 IF /I %USER_INPUT%==7 (GOTO CODE_EXIT)
 GOTO CODE_EXIT
+
+:ACS_GALAXY
+ECHO NO CONFIG FOR GALAXY AT THIS TIME PLEASE CONTACT NIK COLEMAN
+GOTO CODE_EXIT
+
+:ACS_GALLAGHER
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GALLAGHER_ACS\audit.inf" "C:\Users\ESSAdmin\Desktop"
+auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
+DEL C:\Users\ESSAdmin\Desktop\audit.inf /f /q 
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GALLAGHER_ACS\security.inf" "C:\Users\ESSAdmin\Desktop"
+secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb /verbose
+DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
+XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GALLAGHER_ACS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
+GPUPDATE /FORCE
+
+:ACS_GENETEC
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_ACS\audit.inf" "C:\Users\ESSAdmin\Desktop"
+auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
+DEL C:\Users\ESSAdmin\Desktop\audit.inf /f /q 
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_ACS\security.inf" "C:\Users\ESSAdmin\Desktop"
+secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb /verbose
+DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
+XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_ACS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
+GPUPDATE /FORCE
+
+:VMS_BOSCH
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\BOSCH_VMS\audit.inf" "C:\Users\ESSAdmin\Desktop"
+auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
+DEL C:\Users\ESSAdmin\Desktop\audit.inf /f /q 
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\BOSCH_VMS\security.inf" "C:\Users\ESSAdmin\Desktop"
+secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb /verbose
+DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
+XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\BOSCH_VMS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
+GPUPDATE /FORCE
+
+:VMS_GENETEC
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_VMS\audit.inf" "C:\Users\ESSAdmin\Desktop"
+auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
+DEL C:\Users\ESSAdmin\Desktop\audit.inf /f /q 
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_VMS\security.inf" "C:\Users\ESSAdmin\Desktop"
+secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb /verbose
+DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
+XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_VMS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
+GPUPDATE /FORCE
+
+:VMS_MILESTONE
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\MILESTONE_VMS\audit.inf" "C:\Users\ESSAdmin\Desktop"
+auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
+DEL C:\Users\ESSAdmin\Desktop\audit.inf /f /q 
+COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\MILESTONE_VMS\security.inf" "C:\Users\ESSAdmin\Desktop"
+secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb /verbose
+DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
+XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\MILESTONE_VMS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
+GPUPDATE /FORCE
 
 :CODE_EXIT
 SET /P EXIT_PROMPT="WOULD YOU LIKE TO RESTART THE COMPUTER NOW? [Y/N]:  
