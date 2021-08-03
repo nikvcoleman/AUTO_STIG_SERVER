@@ -89,6 +89,7 @@ secedit /configure /cfg C:\Users\ESSAdmin\Desktop\security.inf /db defltbase.sdb
 DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
 XCOPY /E /I /Y "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GALLAGHER_ACS\PolicyObjects" "C:\Windows\System32\GroupPolicy"
 GPUPDATE /FORCE
+GOTO RESUME
 
 :ACS_GENETEC
 COPY "%DRIVELETTER%:\AUTO_STIG_SERVER\SRVCONFIGS\GENETEC_ACS\audit.inf" "C:\Users\ESSAdmin\Desktop"
