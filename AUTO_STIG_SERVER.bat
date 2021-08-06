@@ -1,8 +1,9 @@
 @ECHO OFF
 CLS
-ECHO REMEMBER TO RUN THIS AS ADMINISTRATOR!
-ECHO This is a Batch Script written for the AASF project server hardening efforts
-ECHO BY Nikolas Coleman 2021. 
+
+powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'Remember to run this script with admin privileges.', 'This is a Batch Script written for the AASF project server hardening efforts BY: NIKOLAS COLEMAN', [System.Windows.Forms.ToolTipIcon]::None)}"
+REM ECHO This is a Batch Script written for the AASF project server hardening efforts
+REM ECHO BY Nikolas Coleman 2021. 
 ECHO Thank me later...preferably with more money
 TIMEOUT /T 5
 SET /P DRIVELETTER="PLEASE ENTER THE CURRENT USB DRIVE LETTER: "
