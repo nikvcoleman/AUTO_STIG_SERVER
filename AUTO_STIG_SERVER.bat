@@ -1,10 +1,6 @@
 @ECHO OFF
 CLS
-
-powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'Remember to run this script with admin privileges.', 'This is a Batch Script written for the AASF project server hardening efforts BY: NIKOLAS COLEMAN', [System.Windows.Forms.ToolTipIcon]::None)}"
-REM ECHO This is a Batch Script written for the AASF project server hardening efforts
-REM ECHO BY Nikolas Coleman 2021. 
-ECHO Thank me later...preferably with more money
+powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'Remember to run this script with admin privileges.', 'This is a Batch Script written for server hardening efforts by: NIKOLAS COLEMAN 2021', [System.Windows.Forms.ToolTipIcon]::None)}" 
 TIMEOUT /T 5
 SET /P DRIVELETTER="PLEASE ENTER THE CURRENT USB DRIVE LETTER: "
 CLS
@@ -24,20 +20,19 @@ REM ECHO IMPORTING AUDIT POLICY!
 REM auditpol /restore /file:C:\Users\ESSAdmin\Desktop\audit.inf
 REM RESUME ABOVE HERE IS PRETTY MUCH USELESS TO RESUME AFTER THIS LAST ADDITION. 
 :RESUME
-ECHO CONFIGURING DEP
+powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'AUTO_STIG_SERVER', 'Configuring DEP.', [System.Windows.Forms.ToolTipIcon]::None)}" 
 BCDEDIT /set {current} nx OptOut
-ECHO DISABLING SECONDARY LOGON SERVICE
+powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'AUTO_STIG_SERVER', 'Disabling Secondary Logon Service', [System.Windows.Forms.ToolTipIcon]::None)}" 
 sc config seclogon start= disabled
-ECHO DELETING POWERSHELL V2
-REM it is kindof impossible at this time to fully uninstall this program as of now there is no fix.
+powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'AUTO_STIG_SERVER', 'Uninstalling Powershell V2.', [System.Windows.Forms.ToolTipIcon]::None)}" 
 DISM /online /Disable-Feature /FeatureName:MicrosoftWindowsPowerShellV2
-ECHO ADDING REGISTRY VALUES
+powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'AUTO_STIG_SERVER', 'Adding Registry Values.', [System.Windows.Forms.ToolTipIcon]::None)}" 
 reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\ /v SchUseStrongCrypto /t REG_DWORD /d 1
 reg add HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\ /v SchUseStrongCrypto /t REG_DWORD /d 1
 reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\ /v LegalNoticeCaption /t REG_SZ /d "US Department of Defense Warning Statement"
 reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\ /v LegalNoticeText /t REG_SZ /d "You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only. By using this IS (which includes any device attached to this IS), you consent to the following conditions: The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations. At any time, the USG may inspect and seize data stored on this IS. Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any USG-authorized purpose.This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or privacy.Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details."
 TIMEOUT /T 3
-ECHO CLEANING UP FILES FROM DESKTOP!
+powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $notify = New-Object System.Windows.Forms.NotifyIcon; $notify.Icon = [System.Drawing.SystemIcons]::Information; $notify.Visible = $true; $notify.ShowBalloonTip(0, 'AUTO_STIG_SERVER', 'Cleaning up files from desktop.', [System.Windows.Forms.ToolTipIcon]::None)}" 
 DEL C:\Users\ESSAdmin\Desktop\audit.inf /f /q 
 DEL C:\Users\ESSAdmin\Desktop\security.inf /f /q
 GOTO CODE_EXIT
